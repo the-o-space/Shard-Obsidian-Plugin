@@ -1,94 +1,138 @@
-# Obsidian Sample Plugin
+# Shard - Advanced File Organization for Obsidian
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+Shard is an Obsidian plugin that provides a powerful, flexible file organization system using custom code blocks. It replaces the default file explorer with a dynamic view based on "shards" - tags that support hierarchical expansion and various relationship types.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## Features
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+- **Custom Shard Syntax**: Define shards in code blocks within your notes
+- **Hierarchical Organization**: Create nested structures with `/` separators
+- **Expansion Syntax**: Use `{option1,option2}` to create multiple shards at once
+- **Multiple Relationship Types**: Related (`=`), Parent (`>`), and Child (`<`) relationships
+- **Visual Distinction**: Different symbols and colors for different relationship types
 
-## First time developing plugins?
+## Usage
 
-Quick starting guide for new plugin devs:
+### Basic Shards
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+Add a `shards` code block anywhere in your note:
 
-## Releasing new releases
-
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
-
-## How to use
-
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+```markdown
+```shards
+Hardware
+Software
+Personal Projects
+```
 ```
 
-If you have multiple URLs, you can also do:
+### Hierarchical Shards
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+Use `/` to create hierarchical structures:
+
+```markdown
+```shards
+Tech/Hardware/Laptop
+Tech/Software/IDE
+Work/Projects/Current
+```
 ```
 
-## API Documentation
+### Expansion Syntax
 
-See https://github.com/obsidianmd/obsidian-api
+Use `{}` to expand multiple options:
+
+```markdown
+```shards
+Tech/{Hardware,Software}
+Work/Projects/{Current,Archived,Ideas}
+Tech/Hardware/{Laptop,Desktop,Mobile}
+```
+```
+
+This expands to:
+- Tech/Hardware
+- Tech/Software
+- Work/Projects/Current
+- Work/Projects/Archived
+- Work/Projects/Ideas
+- Tech/Hardware/Laptop
+- Tech/Hardware/Desktop
+- Tech/Hardware/Mobile
+
+### Relationship Syntax
+
+Define relationships between notes using special prefixes:
+
+```markdown
+```shards
+Hardware
+Software
+
+= [[Related Note]]
+= Another Related Note
+
+> [[Parent Topic]]
+> Higher Level Concept
+
+< [[Sub Topic]]
+< Detailed Implementation
+```
+```
+
+- `=` creates bidirectional relationships (shown with ↔)
+- `>` indicates parent topics (shown with ↑)
+- `<` indicates child/subtopics (shown with ↓)
+
+## Visual Indicators
+
+- **↔ Related**: Bidirectional relationships (accent color)
+- **↑ Parents**: Parent topics (success/green color)
+- **↓ Children**: Child topics (warning/yellow color)
+- **← →**: Files connected through relationships
+
+## Settings
+
+- **Replace Default File Explorer**: Automatically replace the file explorer with Shard view on startup
+
+## Commands
+
+- **Open Shard View**: Manually open the Shard view (useful if you've closed it)
+
+## Example
+
+A complete example note might look like:
+
+```markdown
+# My Hardware Review
+
+```shards
+Tech/Hardware/Laptop
+Reviews/2024
+Brand/Dell
+
+= [[Dell XPS Overview]]
+= [[Laptop Buying Guide]]
+
+> [[Computer Hardware]]
+> [[Tech Reviews]]
+
+< [[XPS 13 Specific Features]]
+< [[Battery Life Tests]]
+```
+
+This is my review of the Dell XPS laptop...
+```
+
+## Installation
+
+1. Download the plugin files
+2. Place them in your `.obsidian/plugins/shard/` folder
+3. Enable the plugin in Obsidian settings
+
+## Why Code Blocks Instead of Frontmatter?
+
+Using code blocks provides several advantages:
+- No YAML syntax restrictions
+- Support for custom symbols and operators
+- Ability to place shards anywhere in the document
+- Future extensibility for new features
+- No conflicts with other frontmatter properties
